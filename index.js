@@ -54,6 +54,17 @@ app.get('/api/persons/:id', (request, response) => {
 app.post('/api/persons', (request, response) => {
     const body = request.body
 
+    if (!body.name || !body.number) {
+        return response.status(400).json({
+            error: 'Name and number are required'
+        })
+    }
+    if (persons.find(person => person.name === body.name)) {
+        return response.status(400).json({
+            error: 'Name already exists'
+        })
+    }
+
     const person = {
         id: generateId(),
         name: body.name,
