@@ -1,3 +1,4 @@
+require('dotenv').config()
 const mongoose = require('mongoose')
 
 if (process.argv.length < 3) {
@@ -7,9 +8,7 @@ if (process.argv.length < 3) {
 
 const password = process.argv[2]
 
-const url =
-    `mongodb+srv://fullstack:${password}@fullstack.gmgratp.mongodb.net/phonebookApp?retryWrites=true&w=majority`
-
+const url = process.env.MONGO_URI
 mongoose.set('strictQuery', false)
 mongoose.connect(url)
 
