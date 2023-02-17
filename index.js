@@ -13,10 +13,6 @@ app.use(express.static('build'))
 app.use(morgan(':method :url :status :res[content-length] -- :response-time ms -- :body'))
 app.use(cors())
 
-const generateId = () => {
-    return Math.floor(Math.random() * 999_999)
-}
-
 app.get('/info', (request, response) => {
     response.send(
         `<p>${new Date()}</p>
@@ -48,21 +44,18 @@ app.post('/api/persons', (request, response) => {
             error: 'Name and number are required'
         })
     }
-    if (persons.find(person => person.name === body.name)) {
-        return response.status(400).json({
-            error: 'Name already exists'
-        })
-    }
 
-    const person = {
-        id: generateId(),
+    // TODO: Check if name already exists
+    // ...
+
+    const person = new Person({
         name: body.name,
         number: body.number
-    }
+    })
 
-    persons = persons.concat(person)
-
-    response.json(person)
+    person.save().then(savedPerson => {
+        response.json(savedPerson)
+    })
 })
 
 app.delete('/api/persons/:id', (request, response) => {
