@@ -4,7 +4,7 @@ const cors = require('cors')
 const app = express()
 const Person = require('./models/person')
 
-morgan.token('body', (req, _res) => {
+morgan.token('body', (req) => {
     return JSON.stringify(req.body)
 })
 
@@ -71,11 +71,11 @@ app.put('/api/persons/:id', (request, response, next) => {
 const errorHandler = (error, _request, response, next) => {
     console.error(`${error.name}: ${error.message}`)
 
-    if (error.name == 'CastError') {
+    if (error.name === 'CastError') {
         return response.status(400).send({
             error: 'id is incorrectly formatted'
         })
-    } else if (error.name == 'ValidationError') {
+    } else if (error.name === 'ValidationError') {
         return response.status(400).json({ error: error.message })
     }
     next(error)
